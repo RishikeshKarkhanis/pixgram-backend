@@ -1,4 +1,4 @@
-const Like = require('../models/likeModel');
+const Like = require('../models/like.model.js');
 
 const getLikes = async () => {
     const likes = await Like.find({});

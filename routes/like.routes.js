@@ -1,5 +1,5 @@
 const express = require('express');
-const {getLikes, createLike, deleteLike} = require('../controllers/likeController.js');
+const {getLikes, createLike, deleteLike} = require('../controllers/like.controller.js');
 
 const router = express.Router();
 
