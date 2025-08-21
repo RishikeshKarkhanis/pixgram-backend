@@ -11,7 +11,7 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     
-    const user = await loginUser(req);
+    const user = await loginUser(req, res);
 
     if (user === null) {
         return res.status(401).send("Login failed: Invalid credentials");

@@ -8,6 +8,7 @@ const commentRoutes = require('./routes/comments.routes.js');
 const followRoutes = require('./routes/follow.routes.js');
 
 const connectDatabase = require('./services/databaseConnection.js');
+const restrictAccess = require('./middlewares/auth.middleware.js')
 
 
 const app = express()
@@ -19,10 +20,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/users', userRoutes);
-app.use('/posts', postRoutes);
-app.use('/likes', likeRoutes);
-app.use('/comments', commentRoutes);
-app.use('/follows', followRoutes);
+app.use('/posts', restrictAccess, postRoutes);
+app.use('/likes', restrictAccess, likeRoutes);
+app.use('/comments', restrictAccess, commentRoutes);
+app.use('/follows', restrictAccess, followRoutes);
 
 
 connectDatabase();
