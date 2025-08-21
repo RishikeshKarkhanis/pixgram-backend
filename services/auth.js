@@ -1,10 +1,20 @@
+const jwt = require('jsonwebtoken');
+
+const secret = "rk250306"
+
 const uidToUser = new Map();
 
-function setUser(uid, user) {
-    uidToUser.set(uid, user);
+function setUser(user) {
+    const payload = {
+        ...user,
+    };
+    return jwt.sign(payload, secret);
 }
-function getUser(uid) {
-    return uidToUser.get(uid);
+function getUser(token) {
+    if(!token) {
+        return null;
+    }
+    return jwt.verify(token, secret);
 }
 
 module.exports = { setUser, getUser };

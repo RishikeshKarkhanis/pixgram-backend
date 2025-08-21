@@ -21,9 +21,8 @@ const loginUser = async (req, res) => {
         return null;
     }
 
-    const uid = uuidv4();  
-    setUser(uid, user);
-    res.cookie('uid', uid);
+    const token = setUser( user);
+    res.cookie('uid', token);
 
     console.log('Login successful for user:', user.username);
     return user;
