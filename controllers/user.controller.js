@@ -10,6 +10,17 @@ const createUser = async (userData) => {
     console.log('User created successfully:', result);
 }
 
+const loginUser = async (req) => {
+    const userData = req.body;
+    const user = await User.findOne(userData);
+    if (!user) {
+        console.log('Login failed: Invalid credentials');
+        return null;
+    }
+    console.log('Login successful for user:', user.username);
+    return user;
+}
+
 const deleteUser = async (userId) => {
     const result = await User.findByIdAndDelete(userId);
     console.log('User deleted successfully:', result);
@@ -20,4 +31,4 @@ const updateUser = async (userId, userData) => {
     console.log('User updated successfully:', result);
 }
 
-module.exports = { createUser, getUsers, deleteUser, updateUser };
+module.exports = { createUser, getUsers, deleteUser, updateUser, loginUser };

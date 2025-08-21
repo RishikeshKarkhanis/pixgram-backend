@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 
 const userRoutes = require('./routes/user.routes.js');
 const postRoutes = require('./routes/post.routes.js');
@@ -8,12 +9,14 @@ const followRoutes = require('./routes/follow.routes.js');
 
 const connectDatabase = require('./services/databaseConnection.js');
 
+
 const app = express()
 
 const port = 3000
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
