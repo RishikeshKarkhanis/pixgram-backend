@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 const userRoutes = require('./routes/user.routes.js');
@@ -13,11 +14,15 @@ const restrictAccess = require('./middlewares/auth.middleware.js')
 
 const app = express()
 
-const port = 3000
+const port = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use(cors({
+  origin: 'http://localhost:5173'   // your React dev server
+}));
 
 app.use('/users', userRoutes);
 app.use('/posts', restrictAccess, postRoutes);

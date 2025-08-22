@@ -8,8 +8,16 @@ const getUsers = async () => {
 }
 
 const createUser = async (userData) => {
-    const result = await User.create(userData);
-    console.log('User created successfully:', result);
+    try {
+        const result = await User.create(userData);
+        console.log('User created successfully:', result);
+        return result;
+    }
+    catch (error) {
+        console.error('Error creating user:', error);
+        return null;
+    }
+    
 }
 
 const loginUser = async (req, res) => {
