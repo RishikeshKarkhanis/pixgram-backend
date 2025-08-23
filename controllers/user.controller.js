@@ -44,6 +44,7 @@ const deleteUser = async (userId) => {
 const updateUser = async (userId, userData) => {
     const result = await User.findByIdAndUpdate(userId, userData, { new: true });
     console.log('User updated successfully:', result);
+    return result;
 }
 
 module.exports = { createUser, getUsers, deleteUser, updateUser, loginUser };

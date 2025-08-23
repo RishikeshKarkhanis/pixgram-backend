@@ -1,17 +1,19 @@
 const express = require('express');
 const { createUser, getUsers, deleteUser, updateUser, loginUser } = require('../controllers/user.controller.js');
-const { getUser } = require('../services/auth.js')
+const { getUser } = require('../services/auth.js');
+const User = require('../models/user.model.js');
 
 const router = express.Router();
 
-router.get('/currentUser', (req, res) => {
+router.get('/currentUser', async (req, res) => {
     const token = req.cookies.uid;
 
     const user = getUser(token);
     if (!user) {
         return res.status(401).send({ "error": "Unauthorized" });
     }
-    res.send(user);
+    const data = await User.findById(user._doc._id);
+    res.json(data);
 });
 
 router.post('/register', async (req, res) => {
@@ -46,8 +48,8 @@ router.delete('/delete/:id', async (req, res) => {
 router.put('/update/:id', async (req, res) => {
     const userId = req.params.id;
     const userData = req.body;
-    updateUser(userId, userData);
-    res.send("User updated successfully");
+    const out = await updateUser(userId, userData);
+    res.json(out);
 });
 
 router.post('/logout', async (req, res) => {
