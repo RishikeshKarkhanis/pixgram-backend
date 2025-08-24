@@ -38,7 +38,7 @@ const loginUser = async (req, res) => {
 
 const deleteUser = async (userId) => {
     const result = await User.findByIdAndDelete(userId);
-    console.log('User deleted successfully:', result);
+    return result;
 }
 
 const updateUser = async (userId, userData) => {

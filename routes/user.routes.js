@@ -13,6 +13,12 @@ router.get('/currentUser', async (req, res) => {
         return res.status(401).send({ "error": "Unauthorized" });
     }
     const data = await User.findById(user._doc._id);
+
+    if(!data) {
+        res.clearCookie("uid");
+        return res.status(401).json({ message: "User not found, please login again" });
+    }
+
     res.json(data);
 });
 
@@ -41,8 +47,8 @@ router.post('/login', async (req, res) => {
 
 router.delete('/delete/:id', async (req, res) => {
     const userId = req.params.id;
-    deleteUser(userId);
-    res.send("User deleted successfully");
+    const result = deleteUser(userId);
+    res.json(result);
 });
 
 router.put('/update/:id', async (req, res) => {
