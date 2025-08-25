@@ -3,6 +3,7 @@ const Post = require('../models/post.model.js');
 const getPosts = async () => {
     const posts = await Post.find();
     console.log('Posts retrieved successfully:', posts);
+    return posts;
 }
 
 const createPost = async (postData) => {

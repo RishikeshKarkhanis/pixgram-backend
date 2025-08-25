@@ -1,12 +1,27 @@
 const express = require('express');
 const { getPosts, createPost, deletePost } = require('../controllers/post.controller.js');
-const { route } = require('./user.routes');
+const User = require('../models/user.model.js');
+const Follow = require('../models/follow.model.js');
+const Post = require('../models/post.model.js');
+
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    getPosts();
-    res.send("The List Of Posts");
+router.get('/', async (req, res) => {
+    const posts = await getPosts();
+    res.json(posts);
+});
+
+router.get('/feed/:id', async (req, res) => {
+    try {
+        const uid = req.params.id;
+        const following = await Follow.find({ follower: uid }).select('following -_id');
+        const followingIds = following.map(f => f.following);
+        const posts = await Post.find({ postedBy: { $in: followingIds } }).sort({ createdAt: -1 });
+        res.json(posts);
+    } catch (error) {
+        res.json({ "error": 'Error fetching feed' });
+    }
 });
 
 router.post('/create', async (req, res) => {
