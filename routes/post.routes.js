@@ -16,13 +16,18 @@ router.get('/', async (req, res) => {
 router.get('/feed/:id', async (req, res) => {
     try {
         const uid = req.params.id;
+
+        // find whom the user is following
         const following = await Follow.find({ follower: uid }).select('following -_id');
         const followingIds = following.map(f => f.following);
 
+        // fetch posts from followed users
         const posts = await Post.find({ postedBy: { $in: followingIds } })
             .populate('postedBy', 'username profilePicture')
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: -1 })
+            .lean();  // return plain JS objects (easy to modify)
 
+        // add hasLiked flag to each post
         const postsWithHasLiked = await Promise.all(
             posts.map(async (post) => {
                 const hasLiked = await Like.exists({
@@ -37,11 +42,12 @@ router.get('/feed/:id', async (req, res) => {
             })
         );
 
-        res.json(posts);
-    } 
-    
+        res.json(postsWithHasLiked);
+    }
+
     catch (error) {
-        res.json({ "error": error.message } );
+        console.error(error);
+        res.status(500).json({ error: 'Error fetching feed' });
     }
 });
 
