@@ -17,7 +17,7 @@ router.get('/feed/:id', async (req, res) => {
         const uid = req.params.id;
         const following = await Follow.find({ follower: uid }).select('following -_id');
         const followingIds = following.map(f => f.following);
-        const posts = await Post.find({ postedBy: { $in: followingIds } }).sort({ createdAt: -1 });
+        const posts = await Post.find({ postedBy: { $in: followingIds } }).populate('postedBy', 'username profilePicture').sort({ createdAt: -1 });
         res.json(posts);
     } catch (error) {
         res.json({ "error": 'Error fetching feed' });

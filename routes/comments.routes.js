@@ -8,10 +8,10 @@ router.get("/", (req, res) => {
     res.send("Get all comments");
 });
 
-router.post("/create", (req, res) => {
+router.post("/create", async (req, res) => {
     const commentData = req.body;
-    createComment(commentData);
-    res.send("Create a new comment");
+    const result = await createComment(commentData);
+    res.json(result);
 });
 
 router.delete("/delete/:id", (req, res) => {

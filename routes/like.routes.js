@@ -10,8 +10,8 @@ router.get('/', async (req, res) => {
 
 router.post('/create', async (req, res) => {
     const likeData = req.body;
-    await createLike(likeData);
-    res.send("Like created successfully");
+    const result = await createLike(likeData);
+    res.json(result);
 });
 
 router.delete('/delete', async (req, res) => {

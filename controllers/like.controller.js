@@ -1,4 +1,5 @@
 const Like = require('../models/like.model.js');
+const Post = require('../models/post.model.js');
 
 const getLikes = async () => {
     const likes = await Like.find({});
@@ -7,7 +8,14 @@ const getLikes = async () => {
 
 const createLike = async (likeData) => {
     const result = await Like.create(likeData);
+    
+    await Post.updateOne(
+        { _id: likeData.postId },
+        { $inc: { likes: 1 } }
+    );
+
     console.log('Like created successfully:', result);
+    return result;
 }
 
 const deleteLike = async (userId, postId) => {
@@ -20,4 +28,4 @@ const deleteLike = async (userId, postId) => {
     }
 }
 
-module.exports = {getLikes, createLike, deleteLike};
+module.exports = { getLikes, createLike, deleteLike };
