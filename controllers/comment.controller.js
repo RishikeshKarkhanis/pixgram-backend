@@ -36,7 +36,7 @@ const createComment = async (commentData) => {
 const deleteComment = async (commentId, commentData) => {
     const result = await Comment.deleteOne({ _id: commentId });
     if (result.deletedCount > 0) {
-        console.log('Comment deleted successfully');
+        console.log(result);
 
         await Post.updateOne(
             { _id: commentData.postId },
