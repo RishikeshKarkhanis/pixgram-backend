@@ -53,14 +53,31 @@ router.get('/feed/:id', async (req, res) => {
 
 router.post('/create', async (req, res) => {
     const postData = req.body;
-    await createPost(postData);
-    res.send("Post created successfully");
+    const data = await createPost(postData);
+    res.json(data);
+});
+
+router.put('/update/:id', async (req, res) => {
+    const postId = req.params.id;
+    const updateData = req.body;
+
+    const result = await Post.findByIdAndUpdate(postId, updateData, { new: true });
+    if (result) {
+        res.json(result);
+    } else {
+        res.status(404).json({ error: 'Post not found' });
+    }
 });
 
 router.delete('/delete/:id', async (req, res) => {
     const postId = req.params.id;
-    await deletePost(postId);
-    res.send("Post deleted successfully");
+    const data = await deletePost(postId);
+    if(data) {
+        res.json(data);
+    }
+    else {
+        res.status(404).json({ message: "No post found to delete" });
+    }
 });
 
 module.exports = router;
