@@ -63,6 +63,8 @@ router.put('/update/:id', async (req, res) => {
 
     const result = await Post.findByIdAndUpdate(postId, updateData, { new: true });
     if (result) {
+        console.log("Post updated:", result);
+        
         res.json(result);
     } else {
         res.status(404).json({ error: 'Post not found' });
