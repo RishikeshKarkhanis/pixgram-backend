@@ -1,4 +1,5 @@
 const Post = require('../models/post.model.js');
+const User = require('../models/user.model.js');
 
 const getPosts = async () => {
     const posts = await Post.find();
@@ -9,6 +10,12 @@ const getPosts = async () => {
 const createPost = async (postData) => {
     const result = await Post.create(postData);
     console.log('Post created successfully:', result);
+
+    await User.updateOne(
+        { _id: result.postedBy },
+        { $inc: { posts: 1 } }
+    );
+
     return result
 }
 
@@ -16,6 +23,11 @@ const deletePost = async (postId) => {
     const result = await Post.findByIdAndDelete(postId);
     if (result) {
         console.log('Post deleted successfully:', result);
+
+        await User.updateOne(
+        { _id: result.postedBy },
+        { $inc: { posts: -1 } });
+
         return result;
     } else {
         console.log('Post not found with ID:', postId);

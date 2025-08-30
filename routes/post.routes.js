@@ -13,6 +13,30 @@ router.get('/', async (req, res) => {
     res.json(posts);
 });
 
+router.get('/myposts/:id', async (req, res) => {
+    const uid = req.params.id;
+
+    const myPosts = await Post.find({postedBy: uid})
+    .populate('postedBy', 'username profilePicture')
+    .sort({ createdAt: -1 }).lean();
+
+    const postsWithHasLiked = await Promise.all(
+        myPosts.map(async (post) => {
+            const hasLiked = await Like.exists({
+                postId: post._id,
+                userId: uid
+            });
+
+            return {
+                ...post,
+                hasLiked: !!hasLiked   // 👈 frontend can now use this
+            };
+        })
+    );
+
+    res.json(postsWithHasLiked);
+});
+
 router.get('/feed/:id', async (req, res) => {
     try {
         const uid = req.params.id;

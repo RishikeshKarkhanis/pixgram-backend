@@ -12,18 +12,28 @@ router.post("/create", async (req, res) => {
     const followData = req.body;
     const followerId = followData.follower;
     const followingId = followData.following;
-    await createFollow(followingId, followerId);
+    const data = await createFollow(followingId, followerId);
 
-    res.send(`Follow created from user ${followerId} to user ${followingId}`);
+    if(data) {
+        res.json(data);
+    }
+    else {
+        res.status(400).json({message:"Error Creating Follow!"});
+    }
 });
 
-router.delete("/delete", (req, res) => {
+router.delete("/delete", async (req, res) => {
     const followData = req.body;
     const followerId = followData.follower;
     const followingId = followData.following;
-    deleteFollow(followingId, followerId);
+    const data = await deleteFollow(followingId, followerId);
 
-    res.send(`Follow deleted from user ${followerId} to user ${followingId}`);
+    if(data) {
+        res.json({"Follow Deleted" : data});
+    }
+    else {
+        res.status(400).json({message:"Error Deleting Follow!"});
+    }
 });
 
 module.exports = router;
