@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
     res.json(posts);
 });
 
+
 router.get('/myposts/:id', async (req, res) => {
     const uid = req.params.id;
 

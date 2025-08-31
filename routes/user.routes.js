@@ -9,6 +9,8 @@ router.get('/currentUser', async (req, res) => {
     const token = req.cookies.uid;
 
     const user = getUser(token);
+    console.log(user);
+    
     if (!user) {
         return res.status(401).send({ "error": "Unauthorized" });
     }
@@ -20,6 +22,20 @@ router.get('/currentUser', async (req, res) => {
     }
 
     res.json(data);
+});
+
+router.get('/getuserbyid/:id', async (req, res) => {
+    const uid = req.params.id;
+    const user = await User.find({_id:uid});
+    res.json(user[0]);
+});
+
+router.get('/getid/:username', async (req, res) => {
+    const username = req.params.username;
+    const user = await User.find({username});
+    console.log(user[0]._id);
+    
+    res.json({"uid":user[0]._id});
 });
 
 router.post('/register', async (req, res) => {
