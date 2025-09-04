@@ -24,6 +24,25 @@ router.get('/currentUser', async (req, res) => {
     res.json(data);
 });
 
+router.get("/search", async (req, res) => {
+  try {
+    const query = req.query.query;
+
+    if (!query) return res.json([]);
+
+    const users = await User.find({
+      username: { $regex: query, $options: "i" } // "i" = case-insensitive
+    })
+      .limit(10) // only top 10 results
+      .select("_id username profilePicture"); // send only needed fields
+
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 router.get('/getuserbyid/:id', async (req, res) => {
     const uid = req.params.id;
     const user = await User.find({_id:uid});
