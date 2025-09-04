@@ -6,6 +6,17 @@ const getFollows = async () => {
     console.log('Follows retrieved successfully:', follows);
 }
 
+const isFollowing = async (followingId, followerId) => {
+    const data = await Follow.find({follower:followerId, following:followingId});
+    console.log(data[0]);
+    if(data[0]) {
+        return data[0];
+    }
+    else {
+        return null
+    }
+}
+
 const createFollow = async (followingId, followerId) => {
     const result = await Follow.create({"follower": followerId, "following": followingId});
 
@@ -47,4 +58,4 @@ const deleteFollow = async (followingId, followerId) => {
     return data;
 }
 
-module.exports = {getFollows, createFollow, deleteFollow};
+module.exports = {getFollows, createFollow, deleteFollow, isFollowing};

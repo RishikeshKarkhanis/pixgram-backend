@@ -1,11 +1,24 @@
 const express = require('express');
-const {getFollows, createFollow, deleteFollow} = require('../controllers/follow.controller.js');
+const Follow = require('../models/follow.model.js');
+const User = require('../models/user.model.js');
+const {getFollows, createFollow, deleteFollow, isFollowing} = require('../controllers/follow.controller.js');
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
     getFollows();
     res.send("Get Follow Data");
+});
+
+router.post("/isfollowing", async (req, res) => {
+    const followData = req.body;
+    const data = await Follow.find({follower:followData.follower, following:followData.following});
+    if(data[0] != null) {
+        return res.json(data[0]);
+    }
+    else {
+        return res.status(404).json({"message":"Follow Not Found!"});
+    }
 });
 
 router.post("/create", async (req, res) => {
