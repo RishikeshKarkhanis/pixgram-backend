@@ -2,6 +2,7 @@ const express = require('express');
 const { createUser, getUsers, deleteUser, updateUser, loginUser } = require('../controllers/user.controller.js');
 const { getUser } = require('../services/auth.js');
 const User = require('../models/user.model.js');
+const Post = require("../models/post.model.js");
 
 const router = express.Router();
 
