@@ -16,6 +16,9 @@ router.post("/isfollowing", async (req, res) => {
     if(data[0] != null) {
         return res.json(data[0]);
     }
+    if(followData.follower === followData.following) {
+        return res.status(200).json({"message":"Own Profile!"})
+    }
     else {
         return res.status(404).json({"message":"Follow Not Found!"});
     }
